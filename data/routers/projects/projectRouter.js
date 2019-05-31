@@ -39,7 +39,7 @@ router.get('/:id',  (req, res) => {
       })
       .catch(err => {
             console.log(err);
-            res.status(500).json({ message: 'Error creating an action' });
+            res.status(500).json({ message: "Couldn't get that project.." });
       })
 });
 
@@ -94,7 +94,9 @@ router.get('/:id/actions', (req, res) => {
             console.log(err)
             res.status(500).json({ message: 'cannot get actions for that project'})
       })
-})
+});
+
+
 
 //middlewares
 // function validateProj(req, res, next) {

@@ -3,6 +3,7 @@ const Projects = require('../../helpers/projectModel');
 
 const router = require('express').Router();
 
+//working
 router.get('/', (req, res) => {
       
       Actions.get()
@@ -14,24 +15,30 @@ router.get('/', (req, res) => {
       })
 });
 
-
-router.post('/', (req, res) => { 
-      console.log(req.body)
-      Actions.insert(req.body)
+//working
+router.get('/:id',  (req, res) => {
+      const id = req.params.id;
+      
+      Actions.get(id)
       .then(action => {
-            res.status(201).json(action);
-            // 201 CREATED
+            if(id){
+                  res.status(200).json(action);
+            } else {
+                  res.status(404).json({ message: "So that's not a thing." })
+            }
       })
       .catch(err => {
-            res.status(500).json({ error: 'could not post new action to database'});
+            console.log(err);
+            res.status(500).json({ message: "Couldn't get that" });
       })
 });
 
+// working
 router.put('/:id', async (req, res) => {
       try {
-            const user = await Actions.update(req.params.id, req.body);
-            if (user) {
-                  res.status(200).json(user);
+            const change = await Actions.update(req.params.id, req.body);
+            if (change) {
+                  res.status(200).json(change);
             } else {
                   res.status(404).json({ message: 'That action could not be found' });
             }
@@ -41,6 +48,7 @@ router.put('/:id', async (req, res) => {
       }
 });
 
+//working
 router.delete('/:id', async (req, res) => {
       try {
             const count = await Actions.remove(req.params.id);
