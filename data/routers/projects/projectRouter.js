@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
       })
 });
 
-router.post('/', (req, res) => { 
+router.post('/', validateProj, (req, res) => { 
       console.log(req.body)
       Projects.insert(req.body)
       .then(project => {
@@ -22,6 +22,16 @@ router.post('/', (req, res) => {
       })
       .catch(err => {
             res.status(500).json({ error: 'could not post new project to database'});
+      })
+});
+
+router.get('/:id', validateId, (req, res) => {
+      Projects.getProjectActions(req.params.id)
+      .then(project => {
+            res.status(200).json(project);
+      })
+      .catch(err => {
+            res.status(500).json({ error: 'could not get project from database'});
       })
 });
 
@@ -53,6 +63,24 @@ router.delete('/:id', async (req, res) => {
       }
 });
 
+//middlewares
+function validateProj(req, res, next) {
+      if(!req.body) {
+            res.status(400).json({ message: 'missing project data' })
+      } else if (!req.body.name) {
+            res.status(400).json({ message: 'missing required name field'})
+      } else {
+            next()
+      }
+};
 
+function validateId(req, res, next){
+      const id = Projects.get(req.params.id)
+      if(!id) {
+            res.status(404).json({ message: 'that ID does not exist' })
+      } else {
+            next()
+      }
+}
 
 module.exports = router;
