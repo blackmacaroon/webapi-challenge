@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 });
 
 //working
-router.post('/', (req, res) => { 
+router.post('/', validateProj, (req, res) => { 
       console.log(req.body)
       Projects.insert(req.body)
       .then(project => {
@@ -55,7 +55,7 @@ router.put('/:id', (req, res) => {
                         if (project) {
                               res.status(200).json(project)
                         } else {
-                              res.status(404).json({ message: 'That project could not be found' });
+                              res.status(404).json({ message: 'That project could not be found' })
                         }
                   })
                   .catch(err => {
@@ -70,9 +70,9 @@ router.delete('/:id', async (req, res) => {
       try {
             const count = await Projects.remove(req.params.id);
             if (count > 0) {
-                  res.status(200).json({ message: 'This project no longer exists.'});
+                  res.status(200).json({ message: 'This project no longer exists.'})
             } else {
-                  res.status(404).json({ message: 'That project could not be found'});
+                  res.status(404).json({ message: 'That project could not be found'})
             }
       } catch (err) {
             console.log(err);
@@ -96,6 +96,7 @@ router.get('/:id/actions', (req, res) => {
       })
 });
 
+//working
 router.post('/:id/actions', (req, res) => {
       const id = req.params.id;
       const action = req.body;
@@ -110,16 +111,17 @@ router.post('/:id/actions', (req, res) => {
 });
 
 
-//middlewares
-// function validateProj(req, res, next) {
-//       if(!req.body) {
-//             res.status(400).json({ message: 'missing project data' })
-//       } else if (!req.body.name) {
-//             res.status(400).json({ message: 'missing required name field'})
-//       } else {
-//             next()
-//       }
-// };
+// middlewares
+
+function validateProj(req, res, next) {
+      if(!req.body) {
+            res.status(400).json({ message: 'missing project data' })
+      } else if (!req.body.name || !req.body.description) {
+            res.status(400).json({ message: 'must have both name and description'})
+      } else {
+            next()
+      }
+};
 
 // //doesn't work
 // function validateId(req, res, next){
