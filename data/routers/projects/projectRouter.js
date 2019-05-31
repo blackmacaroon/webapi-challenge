@@ -1,4 +1,5 @@
 const Projects = require('../../helpers/projectModel');
+const Actions = require('../../helpers/actionModel');
 
 const router = require('express').Router();
 
@@ -15,7 +16,7 @@ router.get('/', (req, res) => {
 });
 
 //working
-router.post('/', validateProj, (req, res) => { 
+router.post('/', (req, res) => { 
       console.log(req.body)
       Projects.insert(req.body)
       .then(project => {
@@ -27,29 +28,41 @@ router.post('/', validateProj, (req, res) => {
       })
 });
 
-// router.get('/:id', validateId, (req, res) => {
-//       Projects.getProjectActions(req.params.id)
-//       .then(project => {
-//             res.status(200).json(project);
-//       })
-//       .catch(err => {
-//             res.status(500).json({ error: 'could not get project from database'});
-//       })
-// });
+//working
+router.get('/:id',  (req, res) => {
+      const id = req.params.id;
+      
+      Projects.get(id)
+      .then(action => {
+            res.status(200).json(action);
+            // 201 CREATED
+      })
+      .catch(err => {
+            console.log(err);
+            res.status(500).json({ message: 'Error creating an action' });
+      })
+});
 
 //working
-router.put('/:id', async (req, res) => {
-      try {
-            const project = await Projects.update(req.params.id, req.body);
-            if (project) {
-                  res.status(200).json(project);
+router.put('/:id', (req, res) => {
+      const id = req.params.id;
+      const { name, description } = req.body;
+            if (! name || !description) {
+                  res.status(400).json({ message: "I'm sorry the project name and description are both required."});
             } else {
-                  res.status(404).json({ message: 'That project could not be found' });
-            }
-      } catch (err) {
-            console.log(err);
-            res.status(500).json({ message: 'Error updating that project' });
-      }
+                  Projects.update(id, req.body)
+                  .then(project => {
+                        if (project) {
+                              res.status(200).json(project)
+                        } else {
+                              res.status(404).json({ message: 'That project could not be found' });
+                        }
+                  })
+                  .catch(err => {
+                        console.log(err);
+                        res.status(500).json({ message: 'Error updating that project' });
+                  })
+            } 
 });
 
 //working
@@ -67,25 +80,41 @@ router.delete('/:id', async (req, res) => {
       }
 });
 
-//middlewares
-function validateProj(req, res, next) {
-      if(!req.body) {
-            res.status(400).json({ message: 'missing project data' })
-      } else if (!req.body.name) {
-            res.status(400).json({ message: 'missing required name field'})
-      } else {
-            next()
-      }
-};
+//working
+router.get('/:id/actions', (req, res) => {
+      Projects.getProjectActions(req.params.id)
+      .then(action => {
+            if (action) {
+                  res.status(200).json(action)
+            } else {
+                  res.status(404).json({ message: 'No actions found for that project'})
+            }
+      })
+      .catch(err => {
+            console.log(err)
+            res.status(500).json({ message: 'cannot get actions for that project'})
+      })
+})
 
-//doesn't work
-function validateId(req, res, next){
-      const id = Projects.get(req.params.id)
-      if(!id) {
-            res.status(404).json({ message: 'that ID does not exist' })
-      } else {
-            next()
-      }
-}
+//middlewares
+// function validateProj(req, res, next) {
+//       if(!req.body) {
+//             res.status(400).json({ message: 'missing project data' })
+//       } else if (!req.body.name) {
+//             res.status(400).json({ message: 'missing required name field'})
+//       } else {
+//             next()
+//       }
+// };
+
+// //doesn't work
+// function validateId(req, res, next){
+//       const id = Projects.get(req.params.id)
+//       if(!id) {
+//             res.status(404).json({ message: 'that ID does not exist' })
+//       } else {
+//             next()
+//       }
+// }
 
 module.exports = router;

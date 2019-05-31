@@ -14,22 +14,16 @@ router.get('/', (req, res) => {
       })
 });
 
-//post route doesnt work!
-router.post('/:id/project', (req, res) => {
-      const newAction = req.body;
-      console.log("action", req.body);
-      const id = req.params.id;
-      newAction.project_id = id;
-      
-      console.log('id', id)
-      Projects.insert(newAction)
+
+router.post('/', (req, res) => { 
+      console.log(req.body)
+      Actions.insert(req.body)
       .then(action => {
             res.status(201).json(action);
             // 201 CREATED
       })
       .catch(err => {
-            console.log(err);
-            res.status(500).json({ message: 'Error creating a new project for that action' });
+            res.status(500).json({ error: 'could not post new action to database'});
       })
 });
 
