@@ -25,14 +25,25 @@ In this challenge, create a web API around the following resources: `Projects` a
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 - [ ] Mention two parts of Express that you learned about this week.
+===============================================================================
+Core features of express.js are Middleware! Also routing, convenienve helpers, endpoints, resources 
 
 - [ ] Describe Middleware?
+===============================================================================
+middleware is a function or an array of functions that intercept the normal processes, perform a specific task, then allow the processes to continue. It's like a board game extension. Id does not disrupt the normal gameplay, it simply inserts itself at a specified part of the game, does a thing, then gameplay continues as you were. In express, middleware takes in req and res, performs a function on them (can modify req or res but does not have to) then uses next() to carry on.
 
 - [ ] Describe a Resource?
+===============================================================================
+a resource is basically any noun that you can think of that your app cares about. i have an app with users, that browse products, and places orders. my resources are users, products, orders. what our app is trying to automate, the nouns were're trying to handle efficiently. 
 
 - [ ] What can the API return to help clients know if a request was successful?
+===============================================================================
+and of the HTTP status codes starting with a 2xx represent success. We determine the exact status code the client sees based on their request. The most common are 200(OK), 201(created) and 202(accepted). we should include a specific message to the client to help communicate the process. ie: 201 - user was successfully created
+
 
 - [ ] How can we partition our application into sub-applications?
+===============================================================================
+we've been using Routing to break up apps into very clean and manageable code, based on their URL endpoints. each route can have it's own routes and middlewares, it keeps each separate concern contained so we can easily navigate our own code, clients can easily navigate, and future devs will easily be able to read our code.
 
 ## Project Setup
 
