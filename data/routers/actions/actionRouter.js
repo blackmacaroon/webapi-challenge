@@ -38,7 +38,7 @@ router.put('/:id', async (req, res) => {
       try {
             const change = await Actions.update(req.params.id, req.body);
             if (change) {
-                  res.status(200).json(change);
+                  res.status(200).json({message: "success"});
             } else {
                   res.status(404).json({ message: 'That action could not be found' });
             }

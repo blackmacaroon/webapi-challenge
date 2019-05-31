@@ -20,7 +20,7 @@ router.post('/', validateProj, (req, res) => {
       console.log(req.body)
       Projects.insert(req.body)
       .then(project => {
-            res.status(201).json(project);
+            res.status(201).json({message: "success"});
             // 201 CREATED
       })
       .catch(err => {
@@ -53,7 +53,7 @@ router.put('/:id', (req, res) => {
                   Projects.update(id, req.body)
                   .then(project => {
                         if (project) {
-                              res.status(200).json(project)
+                              res.status(200).json({message: "success"})
                         } else {
                               res.status(404).json({ message: 'That project could not be found' })
                         }
@@ -103,7 +103,7 @@ router.post('/:id/actions', (req, res) => {
       action.project_id = id;
       Actions.insert(action)
       .then(change => {
-            res.status(201).json(change)
+            res.status(201).json({message: "success"})
       })
       .catch(err => {
             res.status(500).json({ message: "could not create a new action for that project"})
@@ -117,15 +117,16 @@ function validateProj(req, res, next) {
       if(!req.body) {
             res.status(400).json({ message: 'missing project data' })
       } else if (!req.body.name || !req.body.description) {
-            res.status(400).json({ message: 'must have both name and description'})
+            res.status(400).json({ message: 'sorry, name and description are both required'})
       } else {
             next()
       }
 };
 
-// //doesn't work
+//doesn't work
 // function validateId(req, res, next){
-//       const id = Projects.get(req.params.id)
+//       const id = Projects.get(req.body.id)
+//       console.log('validate id', req.params.id)
 //       if(!id) {
 //             res.status(404).json({ message: 'that ID does not exist' })
 //       } else {
