@@ -2,6 +2,7 @@ const Projects = require('../../helpers/projectModel');
 
 const router = require('express').Router();
 
+//working
 router.get('/', (req, res) => {
       
       Projects.get()
@@ -13,6 +14,7 @@ router.get('/', (req, res) => {
       })
 });
 
+//working
 router.post('/', validateProj, (req, res) => { 
       console.log(req.body)
       Projects.insert(req.body)
@@ -25,16 +27,17 @@ router.post('/', validateProj, (req, res) => {
       })
 });
 
-router.get('/:id', validateId, (req, res) => {
-      Projects.getProjectActions(req.params.id)
-      .then(project => {
-            res.status(200).json(project);
-      })
-      .catch(err => {
-            res.status(500).json({ error: 'could not get project from database'});
-      })
-});
+// router.get('/:id', validateId, (req, res) => {
+//       Projects.getProjectActions(req.params.id)
+//       .then(project => {
+//             res.status(200).json(project);
+//       })
+//       .catch(err => {
+//             res.status(500).json({ error: 'could not get project from database'});
+//       })
+// });
 
+//working
 router.put('/:id', async (req, res) => {
       try {
             const project = await Projects.update(req.params.id, req.body);
@@ -49,6 +52,7 @@ router.put('/:id', async (req, res) => {
       }
 });
 
+//working
 router.delete('/:id', async (req, res) => {
       try {
             const count = await Projects.remove(req.params.id);
@@ -74,6 +78,7 @@ function validateProj(req, res, next) {
       }
 };
 
+//doesn't work
 function validateId(req, res, next){
       const id = Projects.get(req.params.id)
       if(!id) {
