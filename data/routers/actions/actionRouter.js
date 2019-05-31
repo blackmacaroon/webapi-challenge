@@ -15,11 +15,11 @@ router.get('/', (req, res) => {
       })
 });
 
+//POST
+
 //working
 router.get('/:id',  (req, res) => {
-      const id = req.params.id;
-      
-      Actions.get(id)
+      Actions.get(req.params.id)
       .then(action => {
             if(id){
                   res.status(200).json(action);

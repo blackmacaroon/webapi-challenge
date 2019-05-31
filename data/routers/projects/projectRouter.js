@@ -96,6 +96,18 @@ router.get('/:id/actions', (req, res) => {
       })
 });
 
+router.post('/:id/actions', (req, res) => {
+      const id = req.params.id;
+      const action = req.body;
+      action.project_id = id;
+      Actions.insert(action)
+      .then(change => {
+            res.status(201).json(change)
+      })
+      .catch(err => {
+            res.status(500).json({ message: "could not create a new action for that project"})
+      })
+});
 
 
 //middlewares
