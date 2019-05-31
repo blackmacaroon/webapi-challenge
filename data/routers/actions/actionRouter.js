@@ -19,7 +19,9 @@ router.get('/', (req, res) => {
 
 //working
 router.get('/:id',  (req, res) => {
+      //get takes in id as an argument
       Actions.get(req.params.id)
+      //if the action has an id, is exists, so return the object matching the id
       .then(action => {
             if(id){
                   res.status(200).json(action);
@@ -36,7 +38,9 @@ router.get('/:id',  (req, res) => {
 // working
 router.put('/:id', async (req, res) => {
       try {
+            // update takes in arguments id and changes
             const change = await Actions.update(req.params.id, req.body);
+            //if there was a change to the body, return success
             if (change) {
                   res.status(200).json({message: "success"});
             } else {
@@ -51,7 +55,9 @@ router.put('/:id', async (req, res) => {
 //working
 router.delete('/:id', async (req, res) => {
       try {
+            //remove deletes the action with the id
             const count = await Actions.remove(req.params.id);
+            //if the id is a number greater than 0 (so if there is an id at all) remove and return status success
             if (count > 0) {
                   res.status(200).json({ message: 'This action no longer exists.'});
             } else {

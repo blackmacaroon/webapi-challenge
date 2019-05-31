@@ -100,6 +100,7 @@ router.get('/:id/actions', (req, res) => {
 router.post('/:id/actions', (req, res) => {
       const id = req.params.id;
       const action = req.body;
+      //create an action with a project-id matching the id of its project
       action.project_id = id;
       Actions.insert(action)
       .then(change => {
@@ -112,10 +113,12 @@ router.post('/:id/actions', (req, res) => {
 
 
 // middlewares
-
+      //to make sure it's a valid submission
 function validateProj(req, res, next) {
+      //if there's no body, there's no data
       if(!req.body) {
             res.status(400).json({ message: 'missing project data' })
+      //the name AND description are required
       } else if (!req.body.name || !req.body.description) {
             res.status(400).json({ message: 'sorry, name and description are both required'})
       } else {
